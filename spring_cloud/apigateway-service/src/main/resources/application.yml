@@ -1,0 +1,47 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: apigateway-service
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: first-service
+              uri: lb://MY-FIRST-SERVICE
+              predicates:
+                - Path=/first-service/**
+              filters:
+#                - AddRequestHeader=first-request, 1st-request-header-by-yaml
+#                - AddResponseHeader=first-response, 1st-response-header-by-yaml
+                - CustomFilter
+            - id: second-service
+              uri: lb://MY-SECOND-SERVICE
+              predicates:
+                - Path=/second-service/**
+              filters:
+#                - AddRequestHeader=second-request, 2nd-request-header-by-yaml
+#                - AddResponseHeader=second-response, 2nd-response-header-by-yaml
+                - name: CustomFilter
+                - name: LoggingFilter
+                  args:
+                    baseMessage: Hi, There.
+                    preLogger: true
+                    postLogger: true
+
+          default-filters:
+            - name: GlobalFilter
+              args:
+                baseMessage: Spring Cloud Gateway WebFlux Global Filter
+                preLogger: true
+                postLogger: true
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
