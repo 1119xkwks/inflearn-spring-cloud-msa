@@ -1,9 +1,27 @@
 server:
-  port: 0
+  port: 60000
 
 spring:
   application:
     name: user-service
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  security:
+    user:
+      name: user
+      password: $2a$10$LR8e8lx/ipD/bXvv48Fer.hbUgGes4KhOhu4RidRn9MVtGloRdLN2
 
 eureka:
   instance:
@@ -14,4 +32,6 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
 
+greeting:
+  message: Welcome to the Simple E-commerce - 2nd.
 
