@@ -1,5 +1,7 @@
 server:
   port: 8000
+  jetty:
+    connection-idle-timeout: 2s
 
 spring:
   application:
@@ -9,6 +11,43 @@ spring:
       server:
         webflux:
           routes:
+#            - id: user-service
+#              uri: lb://USER-SERVICE
+#              predicates:
+#                - Path=/user-service/**
+            - id: user-service
+              uri: lb://USER-SERVICE
+              predicates:
+                - Path=/user-service/login
+                - Method=POST
+              filters:
+                - RemoveRequestHeader=Cookie
+                - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - id: user-service
+              uri: lb://USER-SERVICE
+              predicates:
+                - Path=/user-service/users
+                - Method=POST
+              filters:
+                - RemoveRequestHeader=Cookie
+                - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - id: user-service
+              uri: lb://USER-SERVICE
+              predicates:
+                - Path=/user-service/**
+                - Method=GET
+              filters:
+                - RemoveRequestHeader=Cookie
+                - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+                - AuthorizationHeaderFilter
+            - id: user-service
+              uri: lb://CATALOG-SERVICE
+              predicates:
+                - Path=/catalog-service/**
+            - id: user-service
+              uri: lb://ORDER-SERVICE
+              predicates:
+                - Path=/order-service/**
             - id: first-service
               uri: lb://MY-FIRST-SERVICE
               predicates:
@@ -44,4 +83,7 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+token:
+  secret: jwt_token_should_be_more_than_32
 

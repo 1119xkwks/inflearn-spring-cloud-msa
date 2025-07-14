@@ -7,18 +7,32 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.38/57f8f5e02e92a30fd21b80cbd426a4172b5f8e29/lombok-1.18.38.jar" />
         </processorPath>
-        <module name="user-service.main" />
+        <module name="apigateway-service.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="catalog-servcie" target="17" />
+      <module name="catalog-servcie.main" target="17" />
+      <module name="catalog-servcie.test" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="apigateway-service" options="-parameters" />
       <module name="apigateway-service.main" options="-parameters" />
       <module name="apigateway-service.test" options="-parameters" />
+      <module name="catalog-servcie" options="-parameters" />
+      <module name="catalog-servcie.main" options="-parameters" />
+      <module name="catalog-servcie.test" options="-parameters" />
+      <module name="catalog-service" options="-parameters" />
+      <module name="catalog-service.main" options="-parameters" />
+      <module name="catalog-service.test" options="-parameters" />
       <module name="first-service" options="-parameters" />
       <module name="first-service.main" options="-parameters" />
       <module name="first-service.test" options="-parameters" />
+      <module name="order-service" options="-parameters" />
+      <module name="order-service.main" options="-parameters" />
+      <module name="order-service.test" options="-parameters" />
       <module name="second-service" options="-parameters" />
       <module name="second-service.main" options="-parameters" />
       <module name="second-service.test" options="-parameters" />

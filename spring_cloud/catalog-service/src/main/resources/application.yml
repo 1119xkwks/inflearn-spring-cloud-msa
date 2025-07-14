@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: user-service
+    name: catalog-service
   h2:
     console:
       enabled: true
@@ -18,30 +18,22 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-  security:
-    user:
-      name: user
-      password: $2a$10$LR8e8lx/ipD/bXvv48Fer.hbUgGes4KhOhu4RidRn9MVtGloRdLN2
+    show-sql: true
+    generate-ddl: true
+    database: h2
+    defer-datasource-initialization: true
 
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    prefer-ip-address: true
-    ip-address: 127.0.0.1
   client:
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
     fetch-registry: true
     register-with-eureka: true
 
-greeting:
-  message: Welcome to the Simple E-commerce.
-
 logging:
   level:
-    com.example.userservice: DEBUG
+    com.example.catalogservice: DEBUG
 
-token:
-  expiration_time: 86400000
-  secret: jwt_token_should_be_more_than_32
 
