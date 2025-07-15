@@ -27,6 +27,9 @@
       <module name="catalog-service" options="-parameters" />
       <module name="catalog-service.main" options="-parameters" />
       <module name="catalog-service.test" options="-parameters" />
+      <module name="config-service" options="-parameters" />
+      <module name="config-service.main" options="-parameters" />
+      <module name="config-service.test" options="-parameters" />
       <module name="first-service" options="-parameters" />
       <module name="first-service.main" options="-parameters" />
       <module name="first-service.test" options="-parameters" />

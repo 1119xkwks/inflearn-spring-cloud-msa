@@ -57,6 +57,7 @@ public class WebSecurity /*  Spring Security 6.1 이상에서는 상속 받지 �
 
         http.authorizeHttpRequests(
                 authorize -> authorize
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/**")
                         .access((authSupllier, context) ->
                                 new AuthorizationDecision(

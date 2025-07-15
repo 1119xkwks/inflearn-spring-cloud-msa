@@ -5,6 +5,7 @@
     <file type="web" url="file://$PROJECT_DIR$/apigateway-service" />
     <file type="web" url="file://$PROJECT_DIR$/catalog-servcie" />
     <file type="web" url="file://$PROJECT_DIR$/catalog-service" />
+    <file type="web" url="file://$PROJECT_DIR$/config-service" />
     <file type="web" url="file://$PROJECT_DIR$/first-service" />
     <file type="web" url="file://$PROJECT_DIR$/order-service" />
     <file type="web" url="file://$PROJECT_DIR$/second-service" />

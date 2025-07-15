@@ -59,7 +59,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 		// ⚠️ token.secret는 base64로 인코딩된 문자열이어야 함
 		// ✅ Base64 디코딩된 시크릿 키를 Key 객체로 변환
-		byte[] secretBytes = env.getProperty("token.secret").getBytes(StandardCharsets.UTF_8);
+		String secret = env.getProperty("token.secret");
+		byte[] secretBytes = secret.getBytes(StandardCharsets.UTF_8);
 		Key key = Keys.hmacShaKeyFor(secretBytes); // secretBytes 길이는 32바이트 이상 필요
 
 		String token = Jwts.builder()

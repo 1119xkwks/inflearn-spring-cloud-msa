@@ -41,7 +41,13 @@ logging:
   level:
     com.example.userservice: DEBUG
 
-token:
-  expiration_time: 86400000
-  secret: jwt_token_should_be_more_than_32
+#token:
+#  expiration_time: 86400000
+#  secret: jwt_token_should_be_more_than_32
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans
+
 
