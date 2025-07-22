@@ -1,0 +1,140 @@
+wan@DESKTOP-HK77BCO MINGW64 /c/dev/inflearn-spring-cloud-msa/keystore (main)
+$ keytool -genkeypair -alias apiEncryptionKey -keyalg RSA -dname "CN=Ace Kwon, OU=API Development, O=ytkwon91.com, L=Seoul, C=KR" -keypass "test1234" -keystore apiEncryptionKey.jks -storepass "test1234"
+Generating 2,048 bit RSA key pair and self-signed certificate (SHA256withRSA) with a validity of 90 days
+        for: CN=Ace Kwon, OU=API Development, O=ytkwon91.com, L=Seoul, C=KR
+
+wan@DESKTOP-HK77BCO MINGW64 /c/dev/inflearn-spring-cloud-msa/keystore (main)
+$ keytool -list -keystore apiEncryptionKey.jks
+Enter keystore password:  test1234
+Keystore type: PKCS12
+Keystore provider: SUN
+
+Your keystore contains 1 entry
+
+apiencryptionkey, 2025. 7. 21., PrivateKeyEntry,
+Certificate fingerprint (SHA-256): 1F:DE:00:1C:B4:1A:8E:84:E5:31:25:69:37:BC:2F:71:A2:CF:7B:AA:86:3D:CB:5D:E6:EE:90:21:8A:3F:8B:27
+
+wan@DESKTOP-HK77BCO MINGW64 /c/dev/inflearn-spring-cloud-msa/keystore (main)
+$ keytool -list -keystore apiEncryptionKey.jks -v
+Enter keystore password:  test1234
+Keystore type: PKCS12
+Keystore provider: SUN
+
+Your keystore contains 1 entry
+
+Alias name: apiencryptionkey
+Creation date: 2025. 7. 21.
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: CN=Ace Kwon, OU=API Development, O=ytkwon91.com, L=Seoul, C=KR
+Issuer: CN=Ace Kwon, OU=API Development, O=ytkwon91.com, L=Seoul, C=KR
+Serial number: 22c0d935d10c0968
+Valid from: Mon Jul 21 14:46:37 KST 2025 until: Sun Oct 19 14:46:37 KST 2025
+Certificate fingerprints:
+         SHA1: 2B:5E:15:1D:02:54:AE:56:5A:82:78:45:6C:C0:5B:92:C8:75:8F:DA
+         SHA256: 1F:DE:00:1C:B4:1A:8E:84:E5:31:25:69:37:BC:2F:71:A2:CF:7B:AA:86:3D:CB:5D:E6:EE:90:21:8A:3F:8B:27
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 43 3E 31 A6 14 DE 5A 37   78 E0 D8 E1 74 AC 7E 26  C>1...Z7x...t..&
+0010: 41 9A 24 0B                                        A.$.
+]
+]
+
+
+
+*******************************************
+*******************************************
+
+
+
+wan@DESKTOP-HK77BCO MINGW64 /c/dev/inflearn-spring-cloud-msa/keystore (main)
+$
+
+wan@DESKTOP-HK77BCO MINGW64 /c/dev/inflearn-spring-cloud-msa/keystore (main)
+$ keytool -export -alias apiEncryptionKey -keystore apiEncryptionKey.jks -rfc -file trustServer.cer
+Enter keystore password:  test1234
+Certificate stored in file <trustServer.cer>
+
+wan@DESKTOP-HK77BCO MINGW64 /c/dev/inflearn-spring-cloud-msa/keystore (main)
+$ keytool -import -alias trustServer -file trustServer.cer -keystore publicKey.jks
+Enter keystore password:  test1234
+Re-enter new password: test1234
+Owner: CN=Ace Kwon, OU=API Development, O=ytkwon91.com, L=Seoul, C=KR
+Issuer: CN=Ace Kwon, OU=API Development, O=ytkwon91.com, L=Seoul, C=KR
+Serial number: 22c0d935d10c0968
+Valid from: Mon Jul 21 14:46:37 KST 2025 until: Sun Oct 19 14:46:37 KST 2025
+Certificate fingerprints:
+         SHA1: 2B:5E:15:1D:02:54:AE:56:5A:82:78:45:6C:C0:5B:92:C8:75:8F:DA
+         SHA256: 1F:DE:00:1C:B4:1A:8E:84:E5:31:25:69:37:BC:2F:71:A2:CF:7B:AA:86:3D:CB:5D:E6:EE:90:21:8A:3F:8B:27
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 43 3E 31 A6 14 DE 5A 37   78 E0 D8 E1 74 AC 7E 26  C>1...Z7x...t..&
+0010: 41 9A 24 0B                                        A.$.
+]
+]
+
+Trust this certificate? [no]:  yes
+Certificate was added to keystore
+
+wan@DESKTOP-HK77BCO MINGW64 /c/dev/inflearn-spring-cloud-msa/keystore (main)
+$
+
+wan@DESKTOP-HK77BCO MINGW64 /c/dev/inflearn-spring-cloud-msa/keystore (main)
+$ keytool -list -keystore publicKey.jks -v
+Enter keystore password:  test1234
+Keystore type: PKCS12
+Keystore provider: SUN
+
+Your keystore contains 1 entry
+
+Alias name: trustserver
+Creation date: 2025. 7. 21.
+Entry type: trustedCertEntry
+
+Owner: CN=Ace Kwon, OU=API Development, O=ytkwon91.com, L=Seoul, C=KR
+Issuer: CN=Ace Kwon, OU=API Development, O=ytkwon91.com, L=Seoul, C=KR
+Serial number: 22c0d935d10c0968
+Valid from: Mon Jul 21 14:46:37 KST 2025 until: Sun Oct 19 14:46:37 KST 2025
+Certificate fingerprints:
+         SHA1: 2B:5E:15:1D:02:54:AE:56:5A:82:78:45:6C:C0:5B:92:C8:75:8F:DA
+         SHA256: 1F:DE:00:1C:B4:1A:8E:84:E5:31:25:69:37:BC:2F:71:A2:CF:7B:AA:86:3D:CB:5D:E6:EE:90:21:8A:3F:8B:27
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 43 3E 31 A6 14 DE 5A 37   78 E0 D8 E1 74 AC 7E 26  C>1...Z7x...t..&
+0010: 41 9A 24 0B                                        A.$.
+]
+]
+
+
+
+*******************************************
+*******************************************
+
+
+
+wan@DESKTOP-HK77BCO MINGW64 /c/dev/inflearn-spring-cloud-msa/keystore (main)
+$
+
+
