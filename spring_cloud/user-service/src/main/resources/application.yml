@@ -22,6 +22,11 @@ spring:
     user:
       name: user
       password: $2a$10$LR8e8lx/ipD/bXvv48Fer.hbUgGes4KhOhu4RidRn9MVtGloRdLN2
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 
 eureka:
   instance:
@@ -48,6 +53,6 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans
+        include: refresh, health, beans, busenv, busrefresh
 
 

@@ -7,8 +7,16 @@ spring:
   cloud:
     config:
       server:
+#        native:
+#          search-locations: file:///C:/dev/git-local-repo
         git:
-          uri: file://C:/dev/git-local-repo
+          uri: file:///C:/dev/git-local-repo
+          default-label: master
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 
 #eureka:
 #  client:
@@ -19,4 +27,9 @@ spring:
 #
 #token:
 #  secret: jwt_token_should_be_more_than_32
+management:
+  endpoints:
+    web:
+      exposure:
+        include: busenv, busrefresh
 
