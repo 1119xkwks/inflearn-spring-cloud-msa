@@ -1,5 +1,6 @@
 package com.example.userservice;
 
+import com.example.userservice.client.FeignTracingConfig;
 import com.example.userservice.error.FeignErrorDecoder;
 import feign.Logger;
 import org.springframework.boot.SpringApplication;
@@ -13,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(defaultConfiguration = FeignTracingConfig.class)
 public class UserServiceApplication {
 
 	public static void main(String[] args) {

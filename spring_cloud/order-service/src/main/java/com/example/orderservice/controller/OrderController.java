@@ -17,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/order-service")
@@ -68,7 +65,10 @@ public class OrderController {
     }
 
     @GetMapping("/{userId}/orders")
-    public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {
+    public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId,
+                                                        @RequestHeader Map<String, String> headers
+            ) throws Exception {
+        log.info("Incoming headers: {}", headers);
         log.info("Before retrieve orders data");
         Iterable<OrderEntity> orderList = orderService.getOrdersByUserId(userId);
 
@@ -76,18 +76,16 @@ public class OrderController {
         orderList.forEach(v -> {
             result.add(new ModelMapper().map(v, ResponseOrder.class));
         });
-
-//        try {
-//            Random rnd = new Random();
-//            int value = rnd.nextInt(3);
-//            if (value % 2 == 0) {
-//                Thread.sleep(10000);
-//                throw new Exception("장애 발생");
-//            }
-//        } catch(InterruptedException ex) {
-//            log.warn(ex.getMessage());
-//        }
-
+        try {
+            Random rnd = new Random();
+            int value = rnd.nextInt(3);
+            if (value % 2 == 0) {
+                Thread.sleep(10000);
+                throw new Exception("장애 발생");
+            }
+        } catch(InterruptedException ex) {
+            log.warn(ex.getMessage());
+        }
         log.info("Add retrieved orders data");
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
