@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 30093
 
 spring:
   application:
@@ -26,9 +26,11 @@ spring:
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: false
+    hostname: catalog-service
   client:
     service-url:
-      defaultZone: http://127.0.0.1:8761/eureka
+      defaultZone: http://discovery-service:8761/eureka
     fetch-registry: true
     register-with-eureka: true
 

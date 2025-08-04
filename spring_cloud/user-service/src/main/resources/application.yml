@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 30091
 
 spring:
   application:
@@ -23,7 +23,7 @@ spring:
       name: user
       password: $2a$10$LR8e8lx/ipD/bXvv48Fer.hbUgGes4KhOhu4RidRn9MVtGloRdLN2
   rabbitmq:
-    host: 127.0.0.1
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
@@ -32,11 +32,13 @@ spring:
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    prefer-ip-address: true
-    ip-address: 127.0.0.1
+#    prefer-ip-address: true
+#    ip-address: 127.0.0.1
+    prefer-ip-address: false
+    hostname: user-service
   client:
     service-url:
-      defaultZone: http://127.0.0.1:8761/eureka
+      defaultZone: http://discovery-service:8761/eureka
     fetch-registry: true
     register-with-eureka: true
 
@@ -60,6 +62,6 @@ management:
       probability: 1.0
   zipkin:
     tracing:
-      endpoint: http://localhost:9411/api/v2/spans
+      endpoint: http://zipkin:9411/api/v2/spans
 
 

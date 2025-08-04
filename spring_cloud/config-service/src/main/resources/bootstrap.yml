@@ -1,5 +1,6 @@
 encrypt:
   key-store:
-    location: file:///C:/dev/inflearn-spring-cloud-msa/keystore/apiEncryptionKey.jks
+#    location: file:///C:/dev/inflearn-spring-cloud-msa/keystore/apiEncryptionKey.jks
+    location: file:/apiEncryptionKey.jks
     password: test1234
     alias: apiEncryptionKey

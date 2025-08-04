@@ -26,7 +26,7 @@ public class CatalogController {
     private final CatalogService catalogService;
 //    private final DiscoveryClient discoveryClient;
 
-    @GetMapping("/health-check")
+    @GetMapping("/health_check")
     public String status() {
 //        List<ServiceInstance> serviceList = getApplications();
 //        for (ServiceInstance instance : serviceList) {

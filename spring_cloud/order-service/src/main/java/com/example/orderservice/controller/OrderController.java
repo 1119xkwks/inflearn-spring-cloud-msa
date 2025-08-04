@@ -49,8 +49,8 @@ public class OrderController {
         orderDto.setUserId(userId);
 
         /* jpa */
-//        OrderDto createdOrder = orderService.createOrder(orderDto);
-//        ResponseOrder responseOrder = mapper.map(createdOrder, ResponseOrder.class);
+        OrderDto createdOrder = orderService.createOrder(orderDto);
+        ResponseOrder responseOrder = mapper.map(createdOrder, ResponseOrder.class);
 
 //        /* kafka */
         orderDto.setOrderId(UUID.randomUUID().toString());
@@ -58,9 +58,9 @@ public class OrderController {
 
         /* send this order to the kafka */
         kafkaProducer.send("example-catalog-topic", orderDto);
-        orderProducer.send("orders", orderDto);
+//        orderProducer.send("orders", orderDto);
 
-        ResponseOrder responseOrder = mapper.map(orderDto, ResponseOrder.class);
+//        ResponseOrder responseOrder = mapper.map(orderDto, ResponseOrder.class);
 
         log.info("After added orders data");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
@@ -78,16 +78,16 @@ public class OrderController {
         orderList.forEach(v -> {
             result.add(new ModelMapper().map(v, ResponseOrder.class));
         });
-        try {
-            Random rnd = new Random();
-            int value = rnd.nextInt(3);
-            if (value % 2 == 0) {
-                Thread.sleep(10000);
-                throw new Exception("장애 발생");
-            }
-        } catch(InterruptedException ex) {
-            log.warn(ex.getMessage());
-        }
+//        try {
+//            Random rnd = new Random();
+//            int value = rnd.nextInt(3);
+//            if (value % 2 == 0) {
+//                Thread.sleep(10000);
+//                throw new Exception("장애 발생");
+//            }
+//        } catch(InterruptedException ex) {
+//            log.warn(ex.getMessage());
+//        }
         log.info("Add retrieved orders data");
 
         return ResponseEntity.status(HttpStatus.OK).body(result);

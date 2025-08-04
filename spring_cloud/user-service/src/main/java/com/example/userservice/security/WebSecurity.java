@@ -3,6 +3,7 @@ package com.example.userservice.security;
 import com.example.userservice.service.UserService;
 import jakarta.servlet.Filter;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -26,11 +27,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
+import java.net.InetSocketAddress;
 import java.util.function.Supplier;
 
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
+@Slf4j
 public class WebSecurity /*  Spring Security 6.1 이상에서는 상속 받지 않음  */ {
     private final UserService userService;
     private final Environment env;
@@ -59,12 +62,21 @@ public class WebSecurity /*  Spring Security 6.1 이상에서는 상속 받지 �
                 authorize -> authorize
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/**")
-                        .access((authSupllier, context) ->
-                                new AuthorizationDecision(
-                                        new IpAddressMatcher("127.0.0.1").matches(context.getRequest())
-                                        ||  new IpAddressMatcher("::1").matches(context.getRequest())
-                                )
-                        )
+                        .access((authSupllier, context) -> {
+                            String remoteAddress = context.getRequest().getRemoteAddr();
+                            String remoteHost = context.getRequest().getRemoteHost();
+
+                            log.info("remote address: {}", remoteAddress);
+                            log.info("remote host: {}", remoteHost);
+
+//                            return new AuthorizationDecision(
+//                                    new IpAddressMatcher("127.0.0.1").matches(context.getRequest())
+//                                            ||  new IpAddressMatcher("::1").matches(context.getRequest())
+//                            );
+
+                            // 쿠버네티스 pod로 실행
+                            return new AuthorizationDecision(true);
+                        })
         );
 
         http.addFilterBefore(

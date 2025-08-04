@@ -10,7 +10,8 @@ spring:
 #        native:
 #          search-locations: file:///C:/dev/git-local-repo
         git:
-          uri: file:///C:/dev/git-local-repo
+#          uri: file:///C:/dev/git-local-repo
+          uri: https://github.com/1119xkwks/git-local-repo.git
           default-label: master
   rabbitmq:
     host: 127.0.0.1
