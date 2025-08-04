@@ -1,0 +1,125 @@
+
+## VM 터미널 접속
+# rdctl shell
+
+## Kafka 데이터 디렉토리 삭제
+# sudo rm -rf /var/lib/kafka-data/*
+
+## 디렉토리 권한 재설정
+# sudo mkdir -p /var/lib/kafka-data
+# sudo chown -R 1001:1001 /var/lib/kafka-data
+# sudo chmod -R 775 /var/lib/kafka-data
+
+## 적용 내용 삭제
+# kubectl delete deployment kafka
+# kubectl delete service kafka
+# kubectl delete pvc kafka-pvc
+# kubectl delete pv kafka-pv
+
+## 적용
+# kubectl apply -f kafka-kraft-single.yaml
+## 또는
+# kubectl rollout restart deployment kafka
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: kafka-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  hostPath:
+    path: /var/lib/kafka-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kafka-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: kafka-pv
+  storageClassName: local-path
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+        - name: volume-permissions
+          image: bitnami/minideb
+          command:
+            - sh
+            - -c
+            - |
+              echo "Fixing permissions for Kafka volume..."
+              mkdir -p /bitnami/kafka/data
+              chown -R 1001:1001 /bitnami/kafka/data
+          volumeMounts:
+            - name: kafka-storage
+              mountPath: /bitnami/kafka/data
+      containers:
+        - name: kafka
+          image: bitnami/kafka:latest
+          ports:
+            - containerPort: 19092
+            - containerPort: 19093
+          env:
+            - name: KAFKA_CFG_NODE_ID
+              value: "0"
+            - name: KAFKA_CFG_PROCESS_ROLES
+              value: "broker,controller"
+            - name: KAFKA_CFG_LISTENERS
+              value: "PLAINTEXT://:19092,CONTROLLER://:19093"
+            - name: KAFKA_CFG_ADVERTISED_LISTENERS
+              value: "PLAINTEXT://kafka:19092"
+            - name: KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP
+              value: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+            - name: KAFKA_CFG_CONTROLLER_QUORUM_VOTERS
+              value: "0@kafka:19093"
+            - name: KAFKA_CFG_CONTROLLER_LISTENER_NAMES
+              value: "CONTROLLER"
+            - name: KAFKA_CFG_LOG_DIRS
+              value: "/bitnami/kafka/data"
+            - name: KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE
+              value: "true"
+          volumeMounts:
+            - name: kafka-storage
+              mountPath: /bitnami/kafka/data
+      volumes:
+        - name: kafka-storage
+          persistentVolumeClaim:
+            claimName: kafka-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka
+spec:
+  selector:
+    app: kafka
+  ports:
+    - name: client
+      port: 19092
+      targetPort: 19092
+    - name: controller
+      port: 19093
+      targetPort: 19093
